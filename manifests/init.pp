@@ -47,9 +47,10 @@ class hazelcast (
 	}
 
   case $operatingsystem {
-    'RedHat', 'CentOS': { ensure_packages('wget', 'tree', 'openjdk-8-jdk', 'unzip', 'lsof', 'vim-enhanced') }
-    default:            { ensure_packages('wget', 'tree', 'java-1.8.0-openjdk', 'unzip', 'lsof', 'vim') }  
+    'RedHat', 'CentOS': {$packages = ['wget', 'tree', 'java-1.8.0-openjdk', 'unzip', 'lsof', 'vim-enhanced']}
+    default:            {$packages = ['wget', 'tree', 'openjdk-8-jdk', 'unzip', 'lsof', 'vim'] }
   }
+  ensure_packages($packages)
 
 	exec {'download-hazelcast':
 		command	=> "wget $uri --post-data \"version=hazelcast-$version&type=tar&p=\" -O $pkg",
