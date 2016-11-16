@@ -39,7 +39,7 @@ class hazelcast (
 	$version	= '3.4.2',
 	$uri		= 'http://download.hazelcast.com/download.jsp',
 	$pkg		= "/tmp/hazelcast-$version.tar.gz",
-	$home		= '/star'
+	$home		= '/hazelcast',
 ) {
 	
 	Exec { path 	=>
@@ -74,5 +74,10 @@ class hazelcast (
 		unless	=> "test -f $home/hazelcast-$version/release_notes.txt",
 		require	=> Exec['download-hazelcast'],
 	}
+
+  exec {'set-hazelcast-ownership':
+    command   => "chown -R oracle:oinstall $home/hazelcast $home/hazelcast-$version",
+    require   => Exec['unpack-hazelcast'],
+  } 
 
 }
